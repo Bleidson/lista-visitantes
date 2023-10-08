@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Entrada</title>
+    <style>
+        @property --rotate {
+            syntax: "<angle>";
+            initial-value: 0deg;
+            inherits: false;
+        }
+        *{
+            margin: 0px;
+            padding: 0px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        body, html{
+            background-color:rgba(181, 201, 243, 0.308);
+            font-size: 16px;
+        }
+        header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px;
+        }
+        .left-content-header{
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+        .logo-ceti{
+            width: 100px;
+        }
+        h1{
+            font-family: Arial;
+            font-weight: bolder ;
+            font-size: 2rem;
+        }
+        
+        /*
+        .circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #333;
+            color: white;
+            font-size: 24px;
+            line-height: 100px;
+            display: inline-block;
+            margin: 10px;
+            border: 5px solid #fff;
+            overflow: hidden;
+            position: relative;
+            transition: border-color 0.5s;
+            
+        }
+        */
+        .meta p{
+             text-align: center;
+             font-weight: bold;
+        }
+        .circle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            height: 50px;
+            background: white;
+            
+            
+            position: relative;
+            border-radius: 6px;
+        }
+        .circle::before {
+            content: "";
+            display: block;
+            width: 104%;
+            height: 110%;
+            border-radius: 8px;
+            background: conic-gradient(
+                    from var(--rotate) at 50% 50%,
+                    #1d7afc 6%,
+                    transparent 30%,
+                    transparent 70%,
+                    #f8e6a0 90%,
+                    #1d7afc 100%
+                ),
+                #8bdbe5;
+            /* 	background: linear-gradient(140deg, #1d7afc, transparent 60%),
+                linear-gradient(-55deg, #f8e6a0, transparent 50%), #8bdbe5; */
+            position: absolute;
+            z-index: -1;
+            top: -5%;
+            left: -2%;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                --rotate: 0deg;
+            }
+            100% {
+                --rotate: 360deg;
+            }
+        }
+        main{
+            display: flex;
+            justify-content:space-between;
+            margin: auto;
+            background-color: #fff;
+            width: 800px;
+            border-radius: 10px;
+            padding: 30px;
+        }
+        table{
+            
+        }
+
+        button{
+            padding: 10px 20px 10px 20px;
+            border-radius: 20px;
+            border: none;
+            height: 60px;
+            width: 150px;
+            color: #333;
+            font-weight: bolder;
+        }
+        input, select{
+            border: 1px solid lightgray;
+            padding: 10px;
+        }
+
+        
+
+    </style>
+</head>
+<body>
+    
+        <header>
+            <div class="left-content-header">
+                <img src="images/Logo CETI TV(01).png" alt="CETI TV" class="logo-ceti">
+                <h1>Registro de Entrada</h1>
+            </div>
+            
+            <div class="meta">
+                <p>Meta</p>
+                <div class="circle">
+                    <span id="contador">
+                        0
+                    </span> 
+                        / 
+                    <span id="meta">200</span>
+                </div>
+            </div>    
+            
+            
+        </header>
+        
+        <main>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Idade</th>
+                        <th>Unidade de Ensino</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" name="nome" placeholder="Nome">
+                        </td>
+                        <td>
+                            <input type="number" name="idade" placeholder="Idade">
+                        </td>
+                        <td>
+                            <select name="unidade">
+                                <option value="CETI">CETI</option>
+                                <option value="IFPI">IFPI</option>
+                                <option value="Joaquin">Joaquin</option>
+                                <option value="Coronel">Coronel</option>
+                                <option value="Marinho Lemos">Marinho Lemos</option>
+                                <option value="Mario Nogueira">Mario Nogueira</option>
+                                <option value="Não estudo">Não estudo</option>                        </select>
+                        </td>
+                        
+                            
+                        
+                    </tr>
+                    <!-- Você pode adicionar mais linhas conforme necessário -->
+                </tbody>
+            </table>
+            <button onclick="registrarEntrada()">Registrar</button>
+            
+        </main>
+       
+    
+        <script>
+            // Adicione estas linhas no início do seu código JavaScript
+            const contadorElement = document.getElementById("contador");
+            const metaElement = document.getElementById("meta");
+            let contador = 0;
+            const meta = 200;
+                    function registrarEntrada() {
+                        const table = document.querySelector('table');
+                        const nome = table.querySelector('input[name="nome"]').value;
+                        const idade = table.querySelector('input[name="idade"]').value;
+                        const unidade = table.querySelector('select[name="unidade"]').value;
+
+                        // Verifique se todos os campos estão preenchidos
+                        if (nome.trim() === "" || idade.trim() === "" || unidade.trim() === "") {
+                            alert("Por favor, preencha todos os campos.");
+                            return;
+                        }
+
+                        // Adicione uma nova linha à tabela com os dados
+                        const tbody = table.querySelector('tbody');
+                        const newRow = document.createElement('tr');
+                        newRow.innerHTML = `<td>${nome}</td><td>${idade}</td><td>${unidade}</td>`;
+                        tbody.appendChild(newRow);
+
+                        // Limpe os campos após o registro
+                        table.querySelectorAll('input').forEach(input => {
+                            input.value = "";
+                        });
+                    // Atualize o contador de visitantes
+                contador++;
+                contadorElement.innerText = contador;
+
+                // Exiba a meta atualizada dentro do círculo
+                metaElement.innerText = meta;
+
+                    }
+        </script>
+    
+    
+</body>
+</html>
