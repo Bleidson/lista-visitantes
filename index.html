@@ -199,42 +199,99 @@
        
     
         <script>
-            // Adicione estas linhas no início do seu código JavaScript
-            const contadorElement = document.getElementById("contador");
-            const metaElement = document.getElementById("meta");
-            let contador = 0;
-            const meta = 200;
-                    function registrarEntrada() {
-                        const table = document.querySelector('table');
-                        const nome = table.querySelector('input[name="nome"]').value;
-                        const idade = table.querySelector('input[name="idade"]').value;
-                        const unidade = table.querySelector('select[name="unidade"]').value;
+        const table = document.querySelector('table');
+        const contadorElement = document.getElementById("contador");
+        let contador = 0;
 
-                        // Verifique se todos os campos estão preenchidos
-                        if (nome.trim() === "" || idade.trim() === "" || unidade.trim() === "") {
-                            alert("Por favor, preencha todos os campos.");
-                            return;
-                        }
+        // Função para carregar os dados dos cookies
+        function carregarDadosDosCookies() {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim().split('=');
+                if (cookie[0].startsWith('visitante_')) {
+                    const visitante = JSON.parse(decodeURIComponent(cookie[1]));
 
-                        // Adicione uma nova linha à tabela com os dados
-                        const tbody = table.querySelector('tbody');
-                        const newRow = document.createElement('tr');
-                        newRow.innerHTML = `<td>${nome}</td><td>${idade}</td><td>${unidade}</td>`;
-                        tbody.appendChild(newRow);
+                    // Adicione a entrada do visitante à tabela
+                    const tbody = table.querySelector('tbody');
+                    const newRow = document.createElement('tr');
+                    newRow.className = 'visitor';
+                    newRow.innerHTML = `
+                        <td>${visitante.nome}</td>
+                        <td>${visitante.idade}</td>
+                        <td>${visitante.unidade}</td>
+                    `;
+                    tbody.appendChild(newRow);
+                }
+            }
+        }
+        // Função para carregar a meta dos cookies
+        function carregarMetaDosCookies() {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim().split('=');
+                if (cookie[0] === 'meta') {
+                    meta = parseInt(cookie[1], 10);
+                    metaElement.innerText = meta;
+                }
+            }
+        }
+        // Chamada para carregar os dados dos cookies ao carregar a página
+        carregarDadosDosCookies();
+        // Chamada para carregar a meta dos cookies ao carregar a página
+        carregarMetaDosCookies();
+        
 
-                        // Limpe os campos após o registro
-                        table.querySelectorAll('input').forEach(input => {
-                            input.value = "";
-                        });
-                    // Atualize o contador de visitantes
-                contador++;
-                contadorElement.innerText = contador;
+        function registrarEntrada() {
+            const nomeInput = table.querySelector('input[name="nome"]');
+            const idadeInput = table.querySelector('input[name="idade"]');
+            const unidadeSelect = table.querySelector('select[name="unidade"]');
 
-                // Exiba a meta atualizada dentro do círculo
-                metaElement.innerText = meta;
+            const nome = nomeInput.value;
+            const idade = idadeInput.value;
+            const unidade = unidadeSelect.value;
 
-                    }
-        </script>
+            if (nome.trim() === "" || idade.trim() === "" || unidade.trim() === "") {
+                alert("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            // Adicione uma nova linha à tabela com os dados
+            const tbody = table.querySelector('tbody');
+            const newRow = document.createElement('tr');
+            newRow.className = 'visitor';
+            newRow.innerHTML = `
+                <td>${nome}</td>
+                <td>${idade}</td>
+                <td>${unidade}</td>
+            `;
+            tbody.appendChild(newRow);
+
+            // Limpe os campos após o registro
+            nomeInput.value = "";
+            idadeInput.value = "";
+            unidadeSelect.value = "";
+
+            // Atualize o contador de visitantes
+            contador++;
+            contadorElement.innerText = contador;
+
+            // Crie um objeto com os dados do visitante
+            const visitante = {
+                nome: nome,
+                idade: idade,
+                unidade: unidade,
+            };
+
+            // Armazene os dados no cookie
+            document.cookie = `visitante_${contador}=${encodeURIComponent(JSON.stringify(visitante))}; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+
+            // Atualize o contador da meta
+            meta = contador; // Assumindo que a meta é igual ao contador
+            metaElement.innerText = meta;
+
+            document.cookie = `meta=${meta}; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+        }
+    </script>
     
     
 </body>
